@@ -11,17 +11,23 @@ mtcars <- mtcars |> rownames_to_column("car_name")
 write.csv(mtcars, "mtcars.csv")
 
 
+if (!dir.exists("data") | !dir.exists("data/device-testing")) {
+  stop("The data directory or the device-testing directory does not exist.")
+}
 
-# get the most recent timestamped directory
-print(getwd())
 
 data_directory <- list.dirs(path = "data/device-testing", full.names = TRUE)
-latest_directory <- data_directory[which.max(file.info(data_directory)$mtime)]
+data_directory <- data_directory[data_directory != "data/device-testing"]  # remove the "data/device-testing" directory
+timestamps <- basename(data_directory)
+latest_timestamp <- max(timestamps)
+latest_directory <- file.path("data/device-testing", latest_timestamp)
 responses_filepath <- file.path(latest_directory, "Responses.csv")
 labels_filepath <- file.path(latest_directory, "Labels.csv")
 print(data_directory)
 print(latest_directory)
 
+
+responses_filepath
 # load the responses and labels data
 responses <- read_csv(responses_filepath)
 labels <- read_csv(labels_filepath)
@@ -52,5 +58,5 @@ for(i in 1:length(value_labels_list)) {
 
 write.csv(responses, file = file.path(latest_directory, "responses_labeled.csv"))
 saveRDS(responses_labeled, file = file.path(latest_directory, "responses_labeled.rds"))
-write_sav(responses_labeled, file.path(latest_directory, "responses_labeled.sav"))
+#write_sav(responses_labeled, file.path(latest_directory, "responses_labeled.sav"))
 #
