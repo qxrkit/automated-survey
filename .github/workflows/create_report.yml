@@ -1,0 +1,42 @@
+name: Process Data in R
+
+on:
+  workflow_dispatch:
+
+jobs:
+  render:
+    name: Update graphs
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      RENV_PATHS_ROOT: ~/.local/share/renv
+    steps:
+      - uses: actions/checkout@v2
+      - uses: r-lib/actions/setup-r@v2
+        with:
+          r-version: '4.3.0'
+          # don't reinstall R
+          install-r: false
+          # use RStudio's CRAN mirror with precompiled binaries
+          use-public-rspm: true
+      - name: Cache packages
+        uses: actions/cache@v2
+        with:
+          path: ${{ env.RENV_PATHS_ROOT }}
+          key: ${{ runner.os }}-renv-${{ hashFiles('**/renv.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-renv-
+      - name: Restore packages
+        shell: Rscript {0}
+        run: |
+          if (!requireNamespace("renv", quietly = TRUE)) install.packages("renv")
+          renv::restore()
+      - name: Process in R
+        run: Rscript actions/report.R
+      - name: Commit changes
+        run: |
+          git config --local user.email "actions@github.com"
+          git config --local user.name "actions-user"
+          git add .
+          git commit -m "GH ACTION Headlines $(date)" || echo "No changes to commit."
+          git push origin main || echo "No changes to push."
