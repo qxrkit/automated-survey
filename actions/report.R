@@ -1,8 +1,9 @@
 # load necessary libraries
 
 print(getwd())
-# library(dplyr)
-library(tidyverse)
+library(dplyr)
+library(tibble)
+
 mtcars <- mtcars |> rownames_to_column("car_name")
 write.csv(mtcars, "mtcars.csv")
 
