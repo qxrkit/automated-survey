@@ -36,6 +36,11 @@ jobs:
           renv::restore()
       - name: Process in R
         run: Rscript actions/report.R
+      - name: Set up Quarto
+        uses: quarto-dev/quarto-actions/setup@v2
+        with:
+          # To install LaTeX to build PDF book 
+          tinytex: true 
       - name: Commit changes
         run: |
           git config --local user.email "actions@github.com"
