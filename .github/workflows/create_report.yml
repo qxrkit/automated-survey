@@ -36,7 +36,6 @@ jobs:
           renv::restore()
       - name: Process in R
         run: Rscript actions/report.R
-      - name: Set up RMarkdown
       - uses: r-lib/actions/setup-pandoc@v2
       - name: Build PDF
         run: |
