@@ -1,6 +1,10 @@
 ---
 title: "report"
-format: pdf
+format: 
+  pdf: default
+  html: default
+  revealjs: 
+    output-file: document-revealjs.html
 editor: visual
 ---
 

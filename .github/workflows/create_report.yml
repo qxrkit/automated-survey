@@ -51,6 +51,7 @@ jobs:
       - name: Build PDF
         run: |
           Rscript -e 'quarto::quarto_render(input = "index.qmd", output_format = "all")'
+          Rscript -e 'quarto::quarto_render(input = "presentation.qmd")'
       - name: Commit changes
         run: |
           git config --local user.email "actions@github.com"
