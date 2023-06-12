@@ -3,12 +3,15 @@ title: "Automated Report"
 format: pdf
 pdf-engine: xelatex
 mainfont: Roboto
-monofont: Roboto
 ---
 
 ## Example
 
 ```{r}
+#| echo: false
+#| warning: false
+#| message: false
+
 library(readr)
 library(haven)
 library(dplyr)
@@ -18,6 +21,9 @@ library(tibble)
 
 
 ```{r}
+#| echo: false
+#| warning: false
+#| message: false
 
 data_directory <- list.dirs(path = "data/device-testing", full.names = TRUE)
 data_directory <- data_directory[data_directory != "data/device-testing"]  # remove the "data/device-testing" directory
@@ -26,8 +32,6 @@ latest_timestamp <- max(timestamps)
 latest_directory <- file.path("data/device-testing", latest_timestamp)
 responses_filepath <- file.path(latest_directory, "Responses.csv")
 labels_filepath <- file.path(latest_directory, "Labels.csv")
-print(data_directory)
-print(latest_directory)
 
 
 responses_filepath
@@ -58,8 +62,6 @@ names(responses) <- colname_mapping$variable_name
 
 labelled::var_label(responses) <- labels |> pull(variable_label)
 
-
-responses
 
 responses <- responses %>% mutate(across(q1:q10, 
                                          ~ case_when(
