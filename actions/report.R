@@ -75,3 +75,4 @@ write_sav(responses, file.path(latest_directory, "responses_labeled.sav"))
 
 
 
+quarto::quarto_render(input = "../index.qmd")
