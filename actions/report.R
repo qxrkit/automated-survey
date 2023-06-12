@@ -32,31 +32,45 @@ responses_filepath
 responses <- read_csv(responses_filepath)
 labels <- read_csv(labels_filepath)
 
-# apply labels
-responses_labeled <- responses %>%
-setNames(labels$variable_label[match(names(responses), labels$variable_name)])
+responses <- read_csv(responses_filepath)
+labels <- read_csv(labels_filepath)
 
-# Create a list to store the value labels
-value_labels_list <- list()
-#
-# Separate the value labels into a list
-labels$value_label <- gsub(" ", "", labels$value_label) # remove spaces
-for(i in 1:nrow(labels)) {
- value_labels_list[[labels$variable_label[i]]] <- strsplit(labels$value_label[i], ";")[[1]]
-}
-#
-## Apply value labels to the responses data
-for(i in 1:length(value_labels_list)) {
-  if(!is.null(value_labels_list[[i]])) {
-    for(j in 1:length(value_labels_list[[i]])) {
-      responses_labeled[[i]][responses_labeled[[i]] == as.character(j)] <- value_labels_list[[i]][j]
-    }
-  }
-}
+# Create a data frame for mapping the variable_name and variable_label
+colname_mapping <- left_join(
+  tibble(old_names = names(responses)),
+  labels, 
+  by = c("old_names" = "variable_label")
+)
 
-## Save the data with labels as an RDS and SPSS file
+# Handle columns not found in labels
+colname_mapping$variable_name <- ifelse(
+  is.na(colname_mapping$variable_name),
+  colname_mapping$old_names,
+  colname_mapping$variable_name
+)
 
-write.csv(responses, file = file.path(latest_directory, "responses_labeled.csv"))
-saveRDS(responses_labeled, file = file.path(latest_directory, "responses_labeled.rds"))
-#write_sav(responses_labeled, file.path(latest_directory, "responses_labeled.sav"))
-#
+# Set the new names to responses data frame
+names(responses) <- colname_mapping$variable_name
+
+
+labelled::var_label(responses) <- labels |> pull(variable_label)
+
+
+responses
+
+responses <- responses %>% mutate(across(q1:q10, 
+                                         ~ case_when(
+                                           . == "Strongly disagree" ~ 1,
+                                           . == "Somewhat disagree" ~ 2,
+                                           . == "Neither disagree nor agree" ~ 3,
+                                           . == "Somewhat agree" ~ 4,
+                                           . == "Strongly agree" ~ 5,
+                                           TRUE ~ NA_real_
+                                         ), .names = "{.col}"))
+
+
+
+
+write_sav(responses, file.path(latest_directory, "responses_labeled.sav"))
+
+
