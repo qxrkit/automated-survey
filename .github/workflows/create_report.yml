@@ -1,7 +1,10 @@
 name: Process Data in R
 
 on:
-  workflow_dispatch:
+  workflow_run:
+    workflows: ["Write to Google Sheet"]
+    types:
+      - completed
 
 jobs:
   render:
