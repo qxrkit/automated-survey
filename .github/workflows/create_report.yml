@@ -50,7 +50,7 @@ jobs:
       - uses: r-lib/actions/setup-pandoc@v2
       - name: Build PDF
         run: |
-          Rscript -e 'rmarkdown::render(input = "index.rmd", output_format = "pdf_document")'
+          Rscript -e 'quarto::quarto_render(input = "index.qmd", output_format = "all")'
       - name: Commit changes
         run: |
           git config --local user.email "actions@github.com"
