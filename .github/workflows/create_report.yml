@@ -39,7 +39,7 @@ jobs:
       - uses: r-lib/actions/setup-pandoc@v2
       - name: Build PDF
         run: |
-          Rscript -e 'rmarkdown::render(input = "index.qmd")'
+          Rscript -e 'rmarkdown::render(input = "index.rmd")'
       - name: Commit changes
         run: |
           git config --local user.email "actions@github.com"
