@@ -34,12 +34,23 @@ jobs:
         run: |
           if (!requireNamespace("renv", quietly = TRUE)) install.packages("renv")
           renv::restore()
+      - name: Set up Quarto
+        uses: quarto-dev/quarto-actions/setup@v2
+        with:
+          tinytex: true 
+      - name: Download and Install Google Font
+        run: |
+          wget https://fonts.google.com/download?family=Roboto -O roboto.zip
+          unzip roboto.zip -d roboto
+          mkdir -p ~/.fonts
+          cp roboto/*.ttf ~/.fonts/
+          fc-cache -f -v
       - name: Process in R
         run: Rscript actions/report.R
       - uses: r-lib/actions/setup-pandoc@v2
       - name: Build PDF
         run: |
-          Rscript -e 'rmarkdown::render(input = "index.rmd", output_format = "pdf")'
+          Rscript -e 'rmarkdown::render(input = "index.rmd", output_format = "pdf_document")'
       - name: Commit changes
         run: |
           git config --local user.email "actions@github.com"
