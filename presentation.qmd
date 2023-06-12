@@ -2,7 +2,8 @@
 title: "Presentation"
 format: 
   pdf: default
-  html: default
+  html:
+    toc: true
   revealjs: 
     output-file: document-revealjs.html
 ---
