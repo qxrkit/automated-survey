@@ -48,6 +48,7 @@ jobs:
       - uses: r-lib/actions/setup-pandoc@v2
       - name: Build PDF
         run: |
+          Rscript -e 'install.packages("quarto")'
           Rscript -e 'source("actions/report.R")'
           Rscript -e 'quarto::quarto_render(input = "index.qmd", output_format = "all")'
       - name: Render and Publish 
