@@ -5,17 +5,13 @@ format:
   html: default
   ipynb: default
   pdf: default
-  revealjs: 
-    output-file: document-revealjs.html
-
 ---
 
-This is an example of an automated report.
+This document is an example of an automated report.
 
-
+[Live Shiny App](https://qxrkit.shinyapps.io/Benchmark/)
 
 ## Survey Data
-
 
 ```{r}
 #| warning: false
@@ -23,7 +19,6 @@ This is an example of an automated report.
 
 library(tidyverse)
 ```
-
 
 ```{r}
 data <- read.csv("data/survey_responses.csv")
@@ -51,5 +46,3 @@ data |> gather() |>
         axis.ticks = element_blank()
     )
 ```
-
-
