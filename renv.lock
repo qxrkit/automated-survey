@@ -22,7 +22,7 @@
     },
     "MASS": {
       "Package": "MASS",
-      "Version": "7.3-58.4",
+      "Version": "7.3-1",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
