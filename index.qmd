@@ -9,13 +9,17 @@ mainfont: Roboto
 
 
 ## Benchmarking Tests
+
 {{ < include demo/packages/uxr/index.qmd > }}
 
 ## Effect of Task on Performance
+
 {{ < include demo/packages/emmeans/index.qmd > }}
 
 ## Best-Worst Analysis
+
 {{ < include demo/packages/bwsTools/index.qmd > }}
 
 ## Segmenting Experiences & Preferences
+
 {{ < include demo/packages/tidyLPA/index.qmd > }}
