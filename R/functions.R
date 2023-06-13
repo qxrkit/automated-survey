@@ -142,7 +142,7 @@ plot_benchmark_results <- function(data) {
       y = NULL
     ) +
     geom_text(
-      data = result_df,
+      data = data,
       aes(
         label = ifelse(probability == 0, "0", probability),
         hjust = -0.5

@@ -1,0 +1,13 @@
+name: Benchmark
+title: Benchmark
+username:
+account: qxrkit
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 9298350
+bundleId: 7338466
+url: https://qxrkit.shinyapps.io/Benchmark/
+when: 1686648383.99179
+lastSyncTime: 1686648383.9918
+asMultiple: FALSE
+asStatic: FALSE
