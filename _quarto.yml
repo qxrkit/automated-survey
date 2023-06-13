@@ -1,0 +1,17 @@
+project:
+  type: book
+  output-dir: _book
+
+book:
+  title: "Report"
+  chapters:
+    - index.qmd
+    - uxr.qmd
+    - emmeans.qmd
+    - maxdiff.qmd
+    - tidyLPA.qmd
+
+format:
+  html:
+    theme:
+     - cosmo

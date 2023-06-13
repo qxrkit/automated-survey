@@ -1,7 +1,6 @@
 ---
 title: "Presentation"
 format: 
-  pdf: default
   html:
     toc: true
   revealjs: 

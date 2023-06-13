@@ -1,0 +1,62 @@
+---
+title: "MaxDiff Analysis"
+execute:
+  warning: false
+  message: false
+---
+
+
+```{r}
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(showtext)
+font_add_google("Open Sans")
+showtext_auto()
+```
+
+
+
+
+
+```{r fig.showtext=TRUE}
+#| message: false
+#| warning: false
+dat <- data.frame(
+  issue = c('Personalization', 'Design', 'Content Quality', 'Interaction', 'Responsiveness', 'Speed'),
+  b = c(-1.068364236, -0.047151591, 0.005714301, 
+        -0.435318071, 0.771885257, 0.309592182),
+  se = c(0.04331852, 0.03780695, 0.03779660, 0.03869530, 
+         0.04064648, 0.03825019)
+)
+
+dat <- dat |> mutate(se = se*3)
+
+# Arrange issues based on b value
+dat <- dat %>%
+  arrange(b) %>%
+  mutate(issue = factor(issue, levels = issue))
+
+# Generate the raw data
+set.seed(123)  # for reproducibility
+dat_raw <- dat %>%
+  tidyr::uncount(20) %>%  # generate 20 data points per issue
+  mutate(b_sample = rnorm(n(), b, se))  # draw from normal distribution
+
+
+
+ggplot(dat_raw, aes(x = b_sample, y = issue, fill = issue)) +
+  ggridges::geom_density_ridges(rel_min_height = 0.005, scale = 0.25) +
+  geom_jitter(width = 0.2, height = 0.1, alpha = 0.2) +
+  labs(x = NULL, y = NULL, title = "User Preferences Based on Best - Worst Scaling",
+       subtitle = "Responsiveness most preferred; personalization least preferred")+
+  theme(legend.position = "none",
+        text = element_text(family = "Open Sans"),
+        axis.text = element_text(size = 18),
+        plot.title = element_text(size = 22),
+        plot.subtitle = element_text(size = 14),
+        plot.title.position = "plot")
+
+
+
+```

@@ -1,0 +1,69 @@
+---
+title: "Benchmarking Task Success"
+output: html
+---
+
+
+```{r}
+#| warning: false
+#| message: false
+library(tidyverse)
+library(uxr)
+library(showtext)
+library(ggtext)
+library(gt)
+library(gtExtras)
+font_add_google("Open Sans")
+showtext_auto()
+```
+
+
+```{r}
+source("R/functions.R")
+```
+
+
+
+```{r}
+set.seed(123)
+
+data <- generate_data(15, c(
+    "sign_in", "navigate", "search", "find_category",
+    "find_item", "find_review", "add_to_cart",
+    "edit_address", "check_out", "track_status"
+))
+
+data_long <- convert_data_from_wide_to_long(data)
+```
+
+
+```{r fig.showtext=TRUE}
+task_success_plot <- plot_task_success(data_long)
+task_success_plot
+```
+
+```{r fig.showtext=TRUE}
+task_failure_plot <- plot_task_failure(data_long)
+task_failure_plot
+```
+
+```{r}
+result_df <- get_benchmark_result(data_long, 15, 0.75)
+
+result_df |>
+    gt() |>
+    tab_options(data_row.padding = "2px", column_labels.padding = "2px") |>
+    cols_align(align = "left", columns = action)
+```
+
+
+
+```{r fig.showtext=TRUE}
+benchmark_results_plot <- plot_benchmark_results(result_df)
+benchmark_results_plot
+```
+
+```{r}
+
+```
+

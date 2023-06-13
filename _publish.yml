@@ -1,0 +1,4 @@
+- source: project
+  quarto-pub:
+    - id: 2a6d1919-0cdf-48a8-9dcb-a11948b36339
+      url: 'https://joe-chelladurai.quarto.pub/automate-all-the-things-with-r'

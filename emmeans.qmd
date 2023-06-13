@@ -1,0 +1,105 @@
+---
+title: "Effects of Type of Task on Performance"
+execute:
+  warning: false
+  message: false
+---
+
+
+
+```{r}
+#| warning: false
+#| message: false
+#| echo: false
+
+library(tidyverse)
+library(infer)
+library(broom)
+library(rstatix)
+library(scales)
+library(janitor)
+library(reactable)
+library(gt)
+library(gtExtras)
+library(emmeans)
+library(tidyverse)
+library(showtext)
+library(ggtext)
+library(ez)
+
+
+font_add_google("Open Sans")
+showtext_auto()
+
+source("R/functions.R")
+
+
+summ <- function(.data, var) {
+  .data %>% 
+    summarise(Min = min({{var}}),
+              Median = median({{var}}),
+              Mean = mean({{var}}),
+              SD = sd({{var}}),
+              Max = max({{var}})
+    ) %>% 
+    mutate(across(where(is.numeric), round, 1))
+}
+
+options(scipen = 10)
+
+gt_tab <- function(.tbl) {
+  .tbl %>% 
+    tab_options(data_row.padding = px(0), 
+                column_labels.padding = px(0), 
+                heading.padding = px(0))  
+}
+
+```
+
+
+```{r fig.showtext=TRUE}
+#| fig-width: 8
+#| fig-height: 5
+
+data <- create_data(mean = c(20, 18, 14, 23, 10, 14), sd = c(2, 4, 3, 3, 4, 3), seed = 42) |>
+  mutate(performance = case_when(performance < 0 ~ 5.5, TRUE ~ performance))
+
+create_plot(data)
+```
+
+```{r}
+effect_of_order(data)
+
+effect_of_group(data)
+
+between_group_differences(data)
+
+within_group_differences(data)
+```
+
+```{r}
+data %>% 
+  ggplot(aes(x=performance)) +
+  geom_histogram(bins = 30) +
+  facet_grid(task ~ group) +
+  theme_bw()
+```
+
+
+```{r}
+data %>% 
+  group_by(task, group) %>% 
+  summarise(mean = mean(performance),
+            sd = sd(performance),
+            median = median(performance),
+            min = min(performance),
+            max = max(performance)) %>% 
+  mutate(across(where(is.numeric), round, 2)) %>% 
+  gt() %>% 
+  gt_tab() %>% 
+  tab_options(table.width = px(800)) %>% 
+   cols_width(
+    everything() ~ px(60)
+  )
+```
+

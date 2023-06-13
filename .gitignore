@@ -1,3 +1,9 @@
 
 
 .Rproj.user
+
+/.quarto/
+
+_book
+
+presentation_files

@@ -1,0 +1,51 @@
+---
+title: "Segmenting Experiences & Preferences"
+output: html_notebook
+---
+
+
+```{r}
+library(tidyverse)
+library(tidyLPA)
+```
+
+```{r}
+set.seed(5)
+data <- pisaUSA15[2:100, ]
+
+
+profiles <- data %>%
+    select(broad_interest, enjoyment, instrumental_mot, self_efficacy) %>%
+    single_imputation() %>%
+    scale() %>%
+    estimate_profiles(3) 
+
+profiles$model_1_class_3$fit |> data.frame() |> rownames_to_column("term") |> rename(estimate = 2) |> mutate(estimate = round(estimate, 3))
+
+
+plot_profiles(profiles)
+
+profiles$model_1_class_3$estimates %>%
+  ggplot(aes(x = Class, y = Estimate, fill = as.factor(Parameter))) +
+  geom_bar(stat = "identity", position = "dodge") +
+  scale_fill_manual(values = c("#F0E442", "#0072B2", "#D55E00", "grey")) +
+  theme(legend.position = "top", 
+        axis.text.x = element_text(vjust = 1, hjust = 1)) +
+  theme(
+      axis.title.y = element_blank(),
+      axis.text.y = element_blank(),
+      axis.ticks.y = element_blank(),
+      strip.text = element_text(size = 14, hjust = 0),
+      plot.title = element_text(size = 18, face = "bold"),
+      plot.subtitle = element_text(size = 13),
+      axis.ticks.x = element_line(colour = "grey")
+    ) +
+    labs(
+      title = "There were Three Segments of Experience & Preference",
+      subtitle = "Distribution of scores",
+      x = "Class", y = NULL, fill = NULL,
+      caption = "Data: Project Skywalker (Device Testing Study)"
+    ) +
+    theme(text = element_text(family = "Open Sans"))
+
+```

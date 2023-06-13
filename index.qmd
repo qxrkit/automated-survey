@@ -1,25 +1,56 @@
 ---
 title: "Automated Report"
-format: pdf
-pdf-engine: xelatex
-mainfont: Roboto
+toc: true
+format: 
+  html: default
+  ipynb: default
+  pdf: default
+  revealjs: 
+    output-file: document-revealjs.html
+
 ---
 
+This is an example of an automated report.
 
 
 
-## Benchmarking Tests
+## Survey Data
 
-{{ < include demo/packages/uxr/index.qmd > }}
 
-## Effect of Task on Performance
+```{r}
+#| warning: false
+#| message: false
 
-{{ < include demo/packages/emmeans/index.qmd > }}
+library(tidyverse)
+library(psych)
+```
 
-## Best-Worst Analysis
 
-{{ < include demo/packages/bwsTools/index.qmd > }}
+```{r}
+data <- read.csv("data/survey_responses.csv")
+```
 
-## Segmenting Experiences & Preferences
+```{r}
+data <- data |> select(-1, -Timestamp)
 
-{{ < include demo/packages/tidyLPA/index.qmd > }}
+psych::describe(data) |>
+    select(-vars) |> 
+    knitr::kable()
+
+
+data |> gather() |> 
+   ggplot(aes(x = value)) +
+    geom_density() +
+    facet_wrap(~key, ncol = 5) +
+    labs(
+        title = "Distribution of Each Question in the System Usability Scale",
+        x = NULL, y = NULL,
+        subtitle = "X axis values are from 1 to 5"
+    ) +
+    theme(
+        axis.text = element_blank(),
+        axis.ticks = element_blank()
+    )
+```
+
+

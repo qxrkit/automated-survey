@@ -48,6 +48,7 @@ jobs:
       - uses: r-lib/actions/setup-pandoc@v2
       - name: Build PDF
         run: |
+          Rscript -e 'source("report.R")'
           Rscript -e 'quarto::quarto_render(input = "index.qmd", output_format = "all")'
       - name: Commit changes
         run: |
