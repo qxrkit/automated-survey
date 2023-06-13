@@ -1,11 +1,11 @@
-name: Process Data in R
+name: Create Report
 
 on:
   workflow_run:
-    workflows: ["Write to Google Sheet"]
+    workflows: ["Get Google Sheets"]
     types:
       - completed
-
+      
 jobs:
   render:
     name: Update graphs
@@ -45,13 +45,10 @@ jobs:
           mkdir -p ~/.fonts
           cp roboto/*.ttf ~/.fonts/
           fc-cache -f -v
-      - name: Process in R
-        run: Rscript actions/report.R
       - uses: r-lib/actions/setup-pandoc@v2
       - name: Build PDF
         run: |
           Rscript -e 'quarto::quarto_render(input = "index.qmd", output_format = "all")'
-          Rscript -e 'quarto::quarto_render(input = "presentation.qmd")'
       - name: Commit changes
         run: |
           git config --local user.email "actions@github.com"
