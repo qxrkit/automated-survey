@@ -1,8 +1,8 @@
-name: Write to Google Sheet
+name: Get Google Sheets
 on: 
   workflow_dispatch:
   schedule:
-    - cron: '0 * * * *'
+    - cron: '0 * * * *' 
 
 jobs:
   build:
@@ -15,8 +15,8 @@ jobs:
         python-version: '3.10'
     - name: Install Python Dependencies
       run: pip install -r actions/requirements.txt
-    - name: Write to Google Sheet
-      run: python actions/write_to_google_sheet.py
+    - name: Get Google Sheets
+      run: python actions/get_google_sheets.py
       env:
         SERVICE_ACCOUNT: ${{ secrets.GOOGLE_SERVICE_ACCOUNT }}
         SPREADSHEET_ID: ${{ secrets.DEVICE_TESTING_A1_SPREADSHEET_ID }}
