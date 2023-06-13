@@ -1,20 +1,13 @@
-# load necessary libraries
 
-print(getwd())
+
 library(dplyr)
 library(tibble)
 library(haven)
 library(readr)
 
-
-mtcars <- mtcars |> rownames_to_column("car_name")
-write.csv(mtcars, "mtcars.csv")
-
-
 if (!dir.exists("data") | !dir.exists("data/device-testing")) {
   stop("The data directory or the device-testing directory does not exist.")
 }
-
 
 data_directory <- list.dirs(path = "data/device-testing", full.names = TRUE)
 data_directory <- data_directory[data_directory != "data/device-testing"]  # remove the "data/device-testing" directory
@@ -23,14 +16,6 @@ latest_timestamp <- max(timestamps)
 latest_directory <- file.path("data/device-testing", latest_timestamp)
 responses_filepath <- file.path(latest_directory, "Responses.csv")
 labels_filepath <- file.path(latest_directory, "Labels.csv")
-print(data_directory)
-print(latest_directory)
-
-
-responses_filepath
-# load the responses and labels data
-responses <- read_csv(responses_filepath)
-labels <- read_csv(labels_filepath)
 
 responses <- read_csv(responses_filepath)
 labels <- read_csv(labels_filepath)
@@ -51,12 +36,7 @@ colname_mapping$variable_name <- ifelse(
 
 # Set the new names to responses data frame
 names(responses) <- colname_mapping$variable_name
-
-
 labelled::var_label(responses) <- labels |> pull(variable_label)
-
-
-responses
 
 responses <- responses %>% mutate(across(q1:q10, 
                                          ~ case_when(
@@ -68,9 +48,4 @@ responses <- responses %>% mutate(across(q1:q10,
                                            TRUE ~ NA_real_
                                          ), .names = "{.col}"))
 
-
-
-
-write_sav(responses, file.path(latest_directory, "responses_labeled.sav"))
-
-
+write.csv(responses, "data/survey_responses.csv")
